@@ -2,22 +2,31 @@
 -- Haskell port of ost.assets (financial system core).
 --
 
---                             name   descr  source      destination amount
-data Transaction = Transaction String String AssetHolder AssetHolder AssetAmount
-    deriving (Show, Eq)
+import Asset
+import AssetHolder
 
---             name   descr  transactions
-data Lot = Lot String String [Transaction]
-    deriving (Show, Eq)
+data Transaction = Transaction
+        { senderName :: String
+        , receiverName :: String
+        , amount :: Asset.Amount
+        } deriving (Show, Eq)
 
-class Named a where
-    name :: a -> String
-    descr :: a -> String
+data Domain = Domain
+        { assetTypes :: [Asset.Type]
+        , assetHolders :: [AssetHolder.Holder]
+        , transactions :: [Transaction]
+        } deriving Show
 
-instance Named Transaction where
-    name (Transaction n _ _ _ _) = n
-    descr (Transaction _ d _ _ _) = d
+usd = Asset.Type "USD" "US Dollar" "US Dollar" "$" 2
+eur = Asset.Type "EUR" "Euro" "Euro" "€" 2
+_USD = Asset.Amount usd
+_EUR = Asset.Amount eur
 
-instance Named Lot where
-    name (Lot n _ _) = n
-    descr (Lot _ d _) = d
+kvas = AssetHolder.Holder "kvas" "Vasily Kuznetsov" [(_USD 1000)]
+vmik = AssetHolder.Holder "vmik" "Mikhail Vartanyan" [(_EUR 1000)]
+
+dom1 = Domain
+        { assetTypes = [usd, eur]
+        , assetHolders = [kvas, vmik]
+        , transactions = []
+        }

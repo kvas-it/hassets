@@ -6,7 +6,7 @@ module Asset where
 
 import Text.Printf (printf)
 
-data AssetType = AssetType
+data Type = Type
         { code :: String
         , name :: String
         , descr :: String
@@ -14,37 +14,37 @@ data AssetType = AssetType
         , precision :: Integer
         } deriving Eq
 
-instance Show AssetType where
-        show (AssetType _ n _ _ _) = n
+instance Show Type where
+        show (Type _ n _ _ _) = n
 
-data AssetAmount = AssetAmount
-        { assetType :: AssetType
+data Amount = Amount
+        { assetType :: Type
         , amount :: Integer
         } deriving Eq
 
-famount :: AssetAmount -> Float
+famount :: Amount -> Float
 famount a = (fromInteger amt) / (fromInteger $ 10 ^ prec)
     where
         amt = amount a
         prec = precision $ assetType a
 
-instance Show AssetAmount where
+instance Show Amount where
         show aa = (symbol $ at) ++ (printf fmt $ famount aa)
             where
                 at = assetType aa
                 fmt = "%0." ++ (show $ precision at) ++ "f"
 
-negate (AssetAmount t a) = AssetAmount t (-a)
+negate (Amount t a) = Amount t (-a)
 
 -- Convenience type
-type Portfolio = [AssetAmount]
+type Portfolio = [Amount]
 
 -- Helper function for AssetHolder.debit
-pAdd :: AssetAmount -> Portfolio -> Portfolio
+pAdd :: Amount -> Portfolio -> Portfolio
 pAdd amt [] = [amt]
 pAdd amt (p:rest) =
         if tAmt == tP
-            then (AssetAmount tP $ aP + aAmt):rest
+            then (Amount tP $ aP + aAmt):rest
             else p:(pAdd amt rest)
     where
         tAmt = assetType amt
