@@ -2,6 +2,8 @@
 -- Haskell port of ost.assets (financial system core).
 --
 
+import Data.IORef
+
 import Asset
 import AssetHolder
 
@@ -37,8 +39,9 @@ addTransaction t (Domain types holders transactions) =
 
 
 usd = Asset.Type "USD" "US Dollar" "US Dollar" "$" 2
-eur = Asset.Type "EUR" "Euro" "Euro" "€" 2
 _USD = Asset.Amount usd
+
+eur = Asset.Type "EUR" "Euro" "Euro" "€" 2
 _EUR = Asset.Amount eur
 
 kvas = AssetHolder.Holder "kvas" "Vasily Kuznetsov" [(_USD 1000)]
@@ -50,10 +53,13 @@ dom = Domain
         , transactions = []
         }
 
-t1 = Transaction "kvas" "vmik" (_USD 100)
-t2 = Transaction "vmik" "kvas" (_EUR 100)
-
-dom1 = addTransaction t1 dom
-dom2 = addTransaction t2 dom1
-
-main = putStrLn $ show dom2
+main = do
+    ref <- newIORef dom
+    putStrLn "Initial state:"
+    readIORef ref >>= print
+    modifyIORef ref $ addTransaction $ Transaction "kvas" "vmik" (_USD 100)
+    putStrLn "\nAfter first transaction:"
+    readIORef ref >>= print
+    modifyIORef ref $ addTransaction $ Transaction "vmik" "kvas" (_EUR 100)
+    putStrLn "\nAfter second transaction:"
+    readIORef ref >>= print
