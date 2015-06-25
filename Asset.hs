@@ -2,7 +2,17 @@
 -- Asset types and amounts
 --
 
-module Asset where
+module Asset (
+    Type
+  , makeType
+  , Amount
+  , assetType
+  , points
+  , makeAmount
+  , addPoints
+  , amount
+  , negateAmount
+  ) where
 
 import Text.Printf (printf)
 
@@ -17,37 +27,33 @@ data Type = Type
 instance Show Type where
         show (Type _ n _ _ _) = n
 
+makeType :: String -> String -> String -> String -> Integer -> Type
+makeType c n d s p = Type c n d s p
+
 data Amount = Amount
         { assetType :: Type
-        , amount :: Integer
+        , points :: Integer
         } deriving Eq
 
-famount :: Amount -> Float
-famount a = (fromInteger amt) / (fromInteger $ 10 ^ prec)
+makeAmount :: Type -> Float -> Amount
+makeAmount t a = Amount t p
     where
-        amt = amount a
+        p = floor $ a * 10 ^ (precision t)
+
+addPoints :: Amount -> Integer -> Amount
+addPoints (Amount t p) inc = Amount t $ p + inc
+
+amount :: Amount -> Float
+amount a = (fromInteger pts) / (fromInteger $ 10 ^ prec)
+    where
+        pts = points a
         prec = precision $ assetType a
 
 instance Show Amount where
-        show aa = (symbol $ at) ++ (printf fmt $ famount aa)
+        show aa = (symbol $ at) ++ (printf fmt $ amount aa)
             where
                 at = assetType aa
                 fmt = "%0." ++ (show $ precision at) ++ "f"
 
-negate (Amount t a) = Amount t (-a)
-
--- Convenience type
-type Portfolio = [Amount]
-
--- Helper function for AssetHolder.debit
-pAdd :: Amount -> Portfolio -> Portfolio
-pAdd amt [] = [amt]
-pAdd amt (p:rest) =
-        if tAmt == tP
-            then (Amount tP $ aP + aAmt):rest
-            else p:(pAdd amt rest)
-    where
-        tAmt = assetType amt
-        aAmt = amount amt
-        tP = assetType p
-        aP = amount p
+negateAmount :: Amount -> Amount
+negateAmount (Amount t p) = Amount t (-p)

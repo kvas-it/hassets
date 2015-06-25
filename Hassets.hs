@@ -19,12 +19,11 @@ data Domain = Domain
         , transactions :: [Transaction]
         } deriving Show
 
-
 applyToHolders t [] = []
 applyToHolders t (h:hs) =
         h':(applyToHolders t hs)
     where
-        hName = AssetHolder.name h
+        hName = holderName h
         h' = if hName == (senderName t)
                 then (credit (assetAmount t) h)
                 else if hName == (receiverName t)
@@ -38,14 +37,18 @@ addTransaction t (Domain types holders transactions) =
         mHolders = applyToHolders t holders
 
 
-usd = Asset.Type "USD" "US Dollar" "US Dollar" "$" 2
-_USD = Asset.Amount usd
+usd = makeType "USD" "US Dollar" "US Dollar" "$" 2
+_USD = makeAmount usd
 
-eur = Asset.Type "EUR" "Euro" "Euro" "€" 2
-_EUR = Asset.Amount eur
+eur = makeType "EUR" "Euro" "Euro" "€" 2
+_EUR = makeAmount eur
 
-kvas = AssetHolder.Holder "kvas" "Vasily Kuznetsov" [(_USD 1000)]
-vmik = AssetHolder.Holder "vmik" "Mikhail Vartanyan" [(_EUR 1000)]
+kvas = makeHolder "kvas" "Vasily Kuznetsov" [
+            makeAccount "kvas-USD" usd,
+            makeAccount "kvas-EUR" eur]
+vmik = makeHolder "vmik" "Mikhail Vartanyan" [
+            makeAccount "vmik-EUR" eur,
+            makeAccount "vmik-USD" usd]
 
 dom = Domain
         { assetTypes = [usd, eur]
