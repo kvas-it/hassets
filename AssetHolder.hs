@@ -3,11 +3,10 @@
 --
 
 module AssetHolder (
-    Account
+    Account(Account)
   , isOfType
   , makeAccount
-  , Holder
-  , makeHolder
+  , Holder(Holder)
   , holderName
   , holderDescr
   , hasAccountFor
@@ -33,9 +32,6 @@ data Holder = Holder
         , holderDescr :: String
         , accounts :: [Account]
         } deriving (Show, Eq)
-
-makeHolder :: String -> String -> [Account] -> Holder
-makeHolder n d a = Holder n d a
 
 hasAccountFor :: Holder -> Type -> Bool
 hasAccountFor h t = any (\a -> a `isOfType` t) (accounts h) 

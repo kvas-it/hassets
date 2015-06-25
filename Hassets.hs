@@ -37,16 +37,16 @@ addTransaction t (Domain types holders transactions) =
         mHolders = applyToHolders t holders
 
 
-usd = makeType "USD" "US Dollar" "US Dollar" "$" 2
+usd = Type "USD" "US Dollar" "US Dollar" "$" 2
 _USD = makeAmount usd
 
-eur = makeType "EUR" "Euro" "Euro" "€" 2
+eur = Type "EUR" "Euro" "Euro" "€" 2
 _EUR = makeAmount eur
 
-kvas = makeHolder "kvas" "Vasily Kuznetsov" [
+kvas = Holder "kvas" "Vasily Kuznetsov" [
             makeAccount "kvas-USD" usd,
             makeAccount "kvas-EUR" eur]
-vmik = makeHolder "vmik" "Mikhail Vartanyan" [
+vmik = Holder "vmik" "Mikhail Vartanyan" [
             makeAccount "vmik-EUR" eur,
             makeAccount "vmik-USD" usd]
 

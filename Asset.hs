@@ -3,12 +3,11 @@
 --
 
 module Asset (
-    Type
-  , makeType
-  , Amount
+    Type(Type)
+  , Amount(Amount)
+  , makeAmount
   , assetType
   , points
-  , makeAmount
   , addPoints
   , amount
   , negateAmount
@@ -26,9 +25,6 @@ data Type = Type
 
 instance Show Type where
         show (Type _ n _ _ _) = n
-
-makeType :: String -> String -> String -> String -> Integer -> Type
-makeType c n d s p = Type c n d s p
 
 data Amount = Amount
         { assetType :: Type
