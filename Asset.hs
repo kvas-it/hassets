@@ -16,20 +16,20 @@ module Asset (
 import Text.Printf (printf)
 
 data Type = Type
-        { code :: String
-        , name :: String
-        , descr :: String
-        , symbol :: String
-        , precision :: Integer
-        } deriving Eq
+    { code :: String
+    , name :: String
+    , descr :: String
+    , symbol :: String
+    , precision :: Integer
+    } deriving Eq
 
 instance Show Type where
-        show (Type _ n _ _ _) = n
+    show (Type _ n _ _ _) = n
 
 data Amount = Amount
-        { assetType :: Type
-        , points :: Integer
-        } deriving Eq
+    { assetType :: Type
+    , points :: Integer
+    } deriving Eq
 
 makeAmount :: Type -> Float -> Amount
 makeAmount t a = Amount t p
@@ -46,10 +46,10 @@ amount a = (fromInteger pts) / (fromInteger $ 10 ^ prec)
         prec = precision $ assetType a
 
 instance Show Amount where
-        show aa = (symbol $ at) ++ (printf fmt $ amount aa)
-            where
-                at = assetType aa
-                fmt = "%0." ++ (show $ precision at) ++ "f"
+    show aa = (symbol $ at) ++ (printf fmt $ amount aa)
+        where
+            at = assetType aa
+            fmt = "%0." ++ (show $ precision at) ++ "f"
 
 negateAmount :: Amount -> Amount
 negateAmount (Amount t p) = Amount t (-p)

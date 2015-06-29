@@ -8,16 +8,16 @@ import Asset
 import AssetHolder
 
 data Transaction = Transaction
-        { senderName :: String
-        , receiverName :: String
-        , assetAmount :: Asset.Amount
-        } deriving (Show, Eq)
+    { senderName :: String
+    , receiverName :: String
+    , assetAmount :: Asset.Amount
+    } deriving (Show, Eq)
 
 data Domain = Domain
-        { assetTypes :: [Asset.Type]
-        , assetHolders :: [AssetHolder.Holder]
-        , transactions :: [Transaction]
-        } deriving Show
+    { assetTypes :: [Asset.Type]
+    , assetHolders :: [AssetHolder.Holder]
+    , transactions :: [Transaction]
+    } deriving Show
 
 applyToHolders t [] = []
 applyToHolders t (h:hs) =
@@ -44,17 +44,17 @@ eur = Type "EUR" "Euro" "Euro" "€" 2
 _EUR = makeAmount eur
 
 kvas = Holder "kvas" "Vasily Kuznetsov" [
-            makeAccount "kvas-USD" usd,
-            makeAccount "kvas-EUR" eur]
+    makeAccount "kvas-USD" usd,
+    makeAccount "kvas-EUR" eur]
 vmik = Holder "vmik" "Mikhail Vartanyan" [
-            makeAccount "vmik-EUR" eur,
-            makeAccount "vmik-USD" usd]
+    makeAccount "vmik-EUR" eur,
+    makeAccount "vmik-USD" usd]
 
 dom = Domain
-        { assetTypes = [usd, eur]
-        , assetHolders = [kvas, vmik]
-        , transactions = []
-        }
+    { assetTypes = [usd, eur]
+    , assetHolders = [kvas, vmik]
+    , transactions = []
+    }
 
 main = do
     ref <- newIORef dom
