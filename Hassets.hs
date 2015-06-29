@@ -17,7 +17,13 @@ data Domain = Domain
     { assetTypes :: [Asset.Type]
     , assetHolders :: [AssetHolder.Holder]
     , transactions :: [Transaction]
-    } deriving Show
+    } 
+
+instance Show Domain where
+    show (Domain types holders transactions) =
+        "Asset types: " ++ (show types) ++ "\n" ++
+        "Holders:\n" ++ (show holders) ++ "\n" ++
+        "Transactions:\n" ++ (show transactions)
 
 applyToHolders t [] = []
 applyToHolders t (h:hs) =
